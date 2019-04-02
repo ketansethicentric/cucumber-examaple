@@ -1,0 +1,73 @@
+pipeline {
+    agent any
+    stages {
+    
+    	stage('bundleUpdate') {
+    	 steps {
+            sh("bundle update")
+            }
+            }
+                
+        stage('Pull Latest Image') {
+            steps {
+                sh 'docker pull iamsethi/cucumber-selenium-docker'
+            }
+        }
+        stage('Run Test') {
+            steps {
+               script {
+ 					 def tags = '@regression'
+               		 runTests(tags, PIPELINE_ID, 'E2E#', PROFILE, DIRECTORY, MAX_PODS)                    
+               	 }
+        }
+        }
+       
+        }
+        
+    environment {
+        MAX_PODS = 100
+        DIRECTORY = "cucumber-selenium"
+        PIPELINE_ID = "${env.BUILD_TAG}"
+        PROFILE = "${env.BRANCH_NAME}"
+    }
+    
+    post{
+    always
+    {
+   	archiveArtifacts artifacts: 'testResult/E2E**', fingerprint: true
+    }
+    
+    }
+    
+    
+}
+
+
+
+def runTests(tags, pipelineID, typeOfRun, profile, directory, maxPods) {
+
+ 	def suiteRunID = "${pipelineID}-${typeOfRun}"
+    echo "SUITE_RUN_ID: ${suiteRunID}\nPROFILE: ${profile}\nPIPELINE_ID: ${pipelineID}"
+    
+    def scenarioCountCmd = "bundle exec rake run_scenario_count[\"${tags}\",${profile}] SUITE_RUN_ID=${suiteRunID}"
+    scenarioCount = sh(returnStdout: true, script: scenarioCountCmd)
+	echo("scenarioCount : ${scenarioCount}")
+	
+	def run_scenario_line = "bundle exec rake run_scenario_line[\"${tags}\",${profile}] SUITE_RUN_ID=${suiteRunID}"
+	stdout = sh(returnStdout: true, script: run_scenario_line)
+	featureTest = stdout.readLines()    
+	def stepsForParallel = [:] //Map
+    def availablePods = Math.min(scenarioCount.toInteger(), maxPods.toInteger())
+            availablePods.times { int i ->
+                stepsForParallel["Run${typeOfRun}${i}"] = {
+                    node {
+						sh("docker run -e HUB_HOST=http://35.234.55.48:30487/wd/hub -e BROWSER=chrome  -e FEATURE_FILE=./src/test/resources/features${featureTest[i]} -v ${WORKSPACE}/testResult/E2E${i}:/usr/share/udemy/target iamsethi/cucumber-selenium-docker  org.junit.runner.JUnitCore com.amazon.runner.RunnerTest")
+                    }
+                }
+            }
+            parallel stepsForParallel
+        } 
+    
+
+
+
