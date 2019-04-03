@@ -40,7 +40,6 @@ public class HomePageSteps {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
 	}
 
 	@After
