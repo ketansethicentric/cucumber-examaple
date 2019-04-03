@@ -1,5 +1,13 @@
 pipeline {
-    agent none
+    agent {
+        
+        node {
+            
+            label 'DOCKER1'
+        }
+
+    }
+
     stages {
         stage('Build Jar') {
             agent {
