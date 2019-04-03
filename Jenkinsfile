@@ -10,7 +10,7 @@ pipeline {
                 }
             }
             steps {
-                sh 'mvn clean install -DHUB_HOST=http://192.168.1.2:4444/wd/hub'
+                sh 'mvn clean install -DskipTests'
             }
         }
         stage('Build Image') {
