@@ -58,10 +58,6 @@ public class HomePageSteps {
 		driver.findElement(By.name("q")).sendKeys(companyName);
 		driver.findElement(By.name("btnK")).click();
 
-		driver.get("https://www.google.com");
-
-		driver.findElement(By.name("q")).sendKeys(companyName);
-		driver.findElement(By.name("btnK")).click();
 	}
 
 }
