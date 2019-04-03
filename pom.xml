@@ -20,17 +20,14 @@
 	</properties>
 
 	<dependencies>
-		<dependency>
-			<groupId>com.vimalselvam</groupId>
-			<artifactId>cucumber-extentsreport</artifactId>
-			<version>3.0.1</version>
-		</dependency>
-
+		<!-- https://mvnrepository.com/artifact/info.cukes/cucumber-jvm -->
 		<dependency>
 			<groupId>info.cukes</groupId>
-			<artifactId>cucumber-java</artifactId>
+			<artifactId>cucumber-jvm</artifactId>
 			<version>${cucumber.version}</version>
+			<type>pom</type>
 		</dependency>
+
 
 		<dependency>
 			<groupId>info.cukes</groupId>
