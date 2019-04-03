@@ -54,13 +54,13 @@ public class HomePageSteps {
 	}
 
 	@When("^he search for \"([^\"]*)\"$")
-	public void he_search_for(String arg1) {
-		driver.findElement(By.name("q")).sendKeys("Centric Consulting");
+	public void he_search_for(String companyName) {
+		driver.findElement(By.name("q")).sendKeys(companyName);
 		driver.findElement(By.name("btnK")).click();
 
 		driver.get("https://www.google.com");
 
-		driver.findElement(By.name("q")).sendKeys("Centric Consulting India");
+		driver.findElement(By.name("q")).sendKeys(companyName);
 		driver.findElement(By.name("btnK")).click();
 	}
 
