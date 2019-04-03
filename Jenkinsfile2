@@ -10,7 +10,7 @@ pipeline {
                 
         stage('Pull Latest Image') {
             steps {
-                sh 'docker pull iamsethi/cucumber-selenium-docker'
+                sh 'docker pull iamsethi/cucumber-example-docker'
             }
         }
         stage('Run Test') {
@@ -25,8 +25,8 @@ pipeline {
         }
         
     environment {
-        MAX_PODS = 100
-        DIRECTORY = "cucumber-selenium"
+        MAX_PODS = 5
+        DIRECTORY = "cucumber-example"
         PIPELINE_ID = "${env.BUILD_TAG}"
         PROFILE = "${env.BRANCH_NAME}"
     }
@@ -61,7 +61,7 @@ def runTests(tags, pipelineID, typeOfRun, profile, directory, maxPods) {
             availablePods.times { int i ->
                 stepsForParallel["Run${typeOfRun}${i}"] = {
                     node {
-						sh("docker run -e HUB_HOST=https://4d20db65.ngrok.io/wd/hub -e BROWSER=chrome  -e FEATURE_FILE=./src/test/resources/features${featureTest[i]} -v ${WORKSPACE}/testResult/E2E${i}:/usr/share/udemy/target iamsethi/cucumber-selenium-docker  org.junit.runner.JUnitCore com.amazon.runner.RunnerTest")
+						sh("docker run -e HUB_HOST=https://4d20db65.ngrok.io/wd/hub -e BROWSER=chrome  -e FEATURE_FILE=./src/test/resources/features${featureTest[i]} -v ${WORKSPACE}/testResult/E2E${i}:/usr/share/centric/target iamsethi/cucumber-example-docker  org.junit.runner.JUnitCore com.amazon.runner.RunnerTest")
                     }
                 }
             }
