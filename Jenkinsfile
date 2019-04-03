@@ -10,7 +10,7 @@ pipeline {
                 }
             }
             steps {
-                sh 'mvn clean install -DskipTests'
+                sh 'mvn clean install -DHUB_HOST=http://localhost:4444/wd/hub'
             }
         }
         stage('Build Image') {
