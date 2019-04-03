@@ -7,8 +7,8 @@ import cucumber.api.junit.Cucumber;
 
 @RunWith(Cucumber.class)
 
-@CucumberOptions(features = "classpath:features", tags = { "@regression" }, glue = {
-		"com.centric.steps" }, monochrome = true)
+@CucumberOptions(features = "classpath:features", tags = { "@regression" }, glue = { "com.centric.steps" }, plugin = {
+		"pretty" }, monochrome = true)
 
 public class RunnerTest {
 
