@@ -5,17 +5,18 @@ pipeline {
             agent {
                 docker {
                     image 'maven:3-alpine'
-                    args '-v /C:/Users/ketan.sethi/.m2:/root/.m2'
+                	args '-v $HOME/.m2:/root/.m2:z -u root'
+          		  	reuseNode true
                 }
             }
             steps {
-                bat 'mvn clean package -DskipTests'
+                sh 'mvn clean install -DskipTests'
             }
         }
         stage('Build Image') {
             steps {
                 script {
-                	app = docker.build("iamsethi/cucumber-example")
+                	app = docker.build("iamsethi/cucumber-selenium-docker")
                 }
             }
         }
